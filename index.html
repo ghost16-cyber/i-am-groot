@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groot's Mini Game - Open-Ended Gameplay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a4b8c);
+            color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(25, 35, 75, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #4CAF50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #8BC34A;
+            margin: 20px 0 15px;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: rgba(40, 50, 90, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(50, 60, 100, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .feature i {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 10px 5px;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #8BC34A;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-secondary {
+            background: #2c3e50;
+        }
+        
+        .btn-secondary:hover {
+            background: #34495e;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #1e2a47;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .leaderboard {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .leaderboard th, .leaderboard td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .leaderboard th {
+            background: rgba(0, 0, 0, 0.2);
+            color: #4CAF50;
+        }
+        
+        .leaderboard tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .user-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #8BC34A;
+        }
+        
+        input {
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #34495e;
+            background: #2c3e50;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .highlight {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stat {
+            background: rgba(50, 60, 100, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8BC34A;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Groot's Mini Game</h1>
+        <p>Open-Ended Gameplay: Explore, Create, and Play Your Way</p>
+    </header>
+    
+    <div class="container">
+        <div class="game-area">
+            <div class="panel">
+                <h2>Game Preview</h2>
+                <div class="canvas-container">
+                    <canvas id="gameCanvas"></canvas>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value" id="score">0</div>
+                        <div>Score</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="progress">0%</div>
+                        <div>Progress</div>
+                    </div>
+                </div>
+                <button class="btn" id="playBtn">Play Game</button>
+                <button class="btn btn-secondary" id="exploreBtn">Explore</button>
+            </div>
+            
+            <div class="panel">
+                <h2>Leaderboard</h2>
+                <table class="leaderboard">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Leaderboard data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+                <button class="btn btn-secondary" id="refreshLeaderboard">Refresh</button>
+            </div>
+        </div>
+        
+        <h2>Game Features</h2>
+        <div class="features">
+            <div class="feature">
+                <i>🌳</i>
+                <h3>Open-World</h3>
+                <p>Explore a vast world with endless possibilities</p>
+            </div>
+            <div class="feature">
+                <i>🏆</i>
+                <h3>Leaderboards</h3>
+                <p>Compete with players worldwide</p>
+            </div>
+            <div class="feature">
+                <i>👤</i>
+                <h3>User Profiles</h3>
+                <p>Save your progress and customize your experience</p>
+            </div>
+            <div class="feature">
+                <i>💾</i>
+                <h3>Cloud Save</h3>
+                <p>Your game data is securely stored</p>
+            </div>
+        </div>
+        
+        <h2>User Login</h2>
+        <div class="user-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button class="btn" id="loginBtn">Login</button>
+            <p>Don't have an account? <span class="highlight">Sign up</span> for free!</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Groot's Mini Game &copy; 2023. All rights reserved.</p>
+        <p>Open-ended gameplay for endless fun!</p>
+    </footer>
+
+    <script>
+        // Game data and state
+        const gameState = {
+            score: 0,
+            progress: 0,
+            player: {
+                x: 150,
+                y: 150,
+                size: 20,
+                color: '#4CAF50'
+            },
+            items: [],
+            trees: [],
+            isPlaying: false
+        };
+
+        // Leaderboard data
+        const leaderboardData = [
+            { rank: 1, player: 'Groot', score: 1200, progress: '100%' },
+            { rank: 2, player: 'StarLord', score: 1150, progress: '95%' },
+            { rank: 3, player: 'Rocket', score: 980, progress: '88%' },
+            { rank: 4, player: 'Gamora', score: 920, progress: '82%' },
+            { rank: 5, player: 'Drax', score: 870, progress: '78%' },
+            { rank: 6, player: 'Mantis', score: 760, progress: '70%' },
+            { rank: 7, player: 'Nebula', score: 680, progress: '65%' },
+            { rank: 8, player: 'Yondu', score: 600, progress: '60%' },
+            { rank: 9, player: 'Kraglin', score: 520, progress: '55%' },
+            { rank: 10, player: 'You', score: 0, progress: '0%' }
+        ];
+
+        // DOM elements
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const progressElement = document.getElementById('progress');
+        const leaderboardBody = document.getElementById('leaderboardBody');
+        const playBtn = document.getElementById('playBtn');
+        const exploreBtn = document.getElementById('exploreBtn');
+        const refreshLeaderboard = document.getElementById('refreshLeaderboard');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Initialize canvas
+        function initCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Generate trees
+            for (let i = 0; i < 8; i++) {
+                gameState.trees.push({
+                    x: Math.random() * canvas.width,
+                    y: 100 + Math.random() * (canvas.height - 150),
+                    size: 25 + Math.random() * 15
+                });
+            }
+            
+            // Generate collectible items
+            for (let i = 0; i < 15; i++) {
+                gameState.items.push({
+                    x: Math.random() * canvas.width,
+                    y: 100 + Math.random() * (canvas.height - 150),
+                    type: Math.floor(Math.random() * 3),
+                    collected: false
+                });
+            }
+            
+            // Draw initial game state
+            drawGame();
+        }
+
+        // Draw the game scene
+        function drawGame() {
+            // Clear canvas
+            ctx.fillStyle = '#1e2a47';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grass
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+            
+            // Draw trees
+            gameState.trees.forEach(tree => {
+                // Tree trunk
+                ctx.fillStyle = '#5d4037';
+                ctx.fillRect(tree.x - 5, tree.y - tree.size, 10, tree.size);
+                
+                // Tree foliage
+                ctx.fillStyle = '#4CAF50';
+                ctx.beginPath();
+                ctx.arc(tree.x, tree.y - tree.size - 15, 20, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Draw collectible items
+            gameState.items.forEach(item => {
+                if (!item.collected) {
+                    if (item.type === 0) {
+                        ctx.fillStyle = '#e74c3c'; // Red
+                    } else if (item.type === 1) {
+                        ctx.fillStyle = '#3498db'; // Blue
+                    } else {
+                        ctx.fillStyle = '#f1c40f'; // Yellow
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.arc(item.x, item.y, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+            
+            // Draw player
+            ctx.fillStyle = gameState.player.color;
+            ctx.beginPath();
+            ctx.arc(gameState.player.x, gameState.player.y, gameState.player.size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw player details (face)
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(gameState.player.x - 6, gameState.player.y - 5, 4, 0, Math.PI * 2);
+            ctx.arc(gameState.player.x + 6, gameState.player.y - 5, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(gameState.player.x, gameState.player.y + 5, 6, 0, Math.PI);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // Update leaderboard display
+        function updateLeaderboard() {
+            leaderboardBody.innerHTML = '';
+            
+            leaderboardData.forEach(player => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${player.rank}</td>
+                    <td>${player.player}</td>
+                    <td>${player.score}</td>
+                    <td>${player.progress}</td>
+                `;
+                
+                leaderboardBody.appendChild(row);
+            });
+        }
+
+        // Update game stats display
+        function updateStats() {
+            scoreElement.textContent = gameState.score;
+            progressElement.textContent = `${gameState.progress}%`;
+        }
+
+        // Handle player movement
+        function movePlayer(dx, dy) {
+            gameState.player.x += dx;
+            gameState.player.y += dy;
+            
+            // Keep player within bounds
+            gameState.player.x = Math.max(gameState.player.size, Math.min(canvas.width - gameState.player.size, gameState.player.x));
+            gameState.player.y = Math.max(gameState.player.size, Math.min(canvas.height - gameState.player.size, gameState.player.y));
+            
+            // Check for item collection
+            gameState.items.forEach(item => {
+                if (!item.collected) {
+                    const dx = gameState.player.x - item.x;
+                    const dy = gameState.player.y - item.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < gameState.player.size + 8) {
+                        item.collected = true;
+                        gameState.score += 10;
+                        gameState.progress = Math.min(100, gameState.progress + 5);
+                        updateStats();
+                    }
+                }
+            });
+            
+            drawGame();
+        }
+
+        // Initialize the game
+        function init() {
+            initCanvas();
+            updateLeaderboard();
+            updateStats();
+            
+            // Set up event listeners
+            playBtn.addEventListener('click', () => {
+                gameState.isPlaying = true;
+                gameState.score = 0;
+                gameState.progress = 0;
+                updateStats();
+                alert('Game started! Use arrow keys to move and collect items.');
+            });
+            
+            exploreBtn.addEventListener('click', () => {
+                alert('Exploration mode activated! Enjoy the open world.');
+            });
+            
+            refreshLeaderboard.addEventListener('click', () => {
+                updateLeaderboard();
+                alert('Leaderboard refreshed!');
+            });
+            
+            loginBtn.addEventListener('click', () => {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username && password) {
+                    alert(`Welcome back, ${username}! Your progress has been loaded.`);
+                } else {
+                    alert('Please enter both username and password.');
+                }
+            });
+            
+            // Handle keyboard input for player movement
+            document.addEventListener('keydown', (e) => {
+                if (!gameState.isPlaying) return;
+                
+                switch(e.key) {
+                    case 'ArrowUp':
+                        movePlayer(0, -10);
+                        break;
+                    case 'ArrowDown':
+                        movePlayer(0, 10);
+                        break;
+                    case 'ArrowLeft':
+                        movePlayer(-10, 0);
+                        break;
+                    case 'ArrowRight':
+                        movePlayer(10, 0);
+                        break;
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', initCanvas);
+        }
+
+        // Start the game when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
