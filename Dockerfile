@@ -2,7 +2,7 @@
 FROM node:18
 
 # Set working directory inside container
-WORKDIR /usr/src/app
+WORKDIR /usr/src/personel
 
 # Copy package.json (dependencies)
 COPY package*.json ./

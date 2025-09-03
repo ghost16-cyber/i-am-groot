@@ -2,7 +2,7 @@ version: "3.8"
 services:
   web:
     build: .
-    container_name: myapp_web
+    container_name: personel_web
     # image: myapp_web_image
     ports:
       - "3000:3000"
