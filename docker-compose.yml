@@ -1,10 +1,10 @@
-version: "3.8"
 services:
   web:
     build: .
-    container_name: personel_web
-    # image: myapp_web_image
+    container_name: personel_app
     ports:
       - "3000:3000"
     volumes:
-      - ./app:/usr/src/app
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm start

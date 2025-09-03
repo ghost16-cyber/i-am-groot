@@ -1,20 +1,20 @@
-# Use Node.js base image
-FROM node:18
+# Use official Node.js image (small variant)
+FROM node:18-slim
 
 # Set working directory inside container
-WORKDIR /usr/src/personel
+WORKDIR /usr/src/app
 
-# Copy package.json (dependencies)
+# Copy package files first (for caching npm install)
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy app source
+# Copy rest of the app code
 COPY . .
 
-# Expose port
+# Expose port 3000
 EXPOSE 3000
 
 # Start the app
-CMD ["node", "app/server.js"]
+CMD ["npm", "start"]
