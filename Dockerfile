@@ -1,17 +1,20 @@
-FROM alpine:3.20
+# Use Node.js base image
+FROM node:18
 
+# Set working directory inside container
+WORKDIR /usr/src/app
 
-# Set working directory inside the container
-WORKDIR /app
+# Copy package.json (dependencies)
+COPY package*.json ./
 
-# Install basic tools (optional, useful for dev/debugging)
-# RUN dnf -y update && \
-#     dnf -y install vim curl wget git && \
-#     dnf clean all\
-RUN   apk add --no-cache bash vim curl wget git
+# Install dependencies
+RUN npm install
 
-# Copy your project files into container (if you have any)
-COPY . /app
+# Copy app source
+COPY . .
 
-# Default command (interactive shell)
-CMD ["/bin/bash"]
+# Expose port
+EXPOSE 3000
+
+# Start the app
+CMD ["node", "app/server.js"]
