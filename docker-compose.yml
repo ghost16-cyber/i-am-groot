@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    container_name: myapp_web
+    # image: myapp_web_image
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/usr/src/app
