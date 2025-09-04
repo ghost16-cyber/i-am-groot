@@ -10,7 +10,7 @@ const pool = new Pool({
   user: process.env.DB_USER || "postgres",
   password: process.env.DB_PASSWORD || "postgres",
   database: process.env.DB_NAME || "personel_db",
-  port: process.env.DB_PORT || 5432,
+  port: process.env.DB_PORT || 3306,
 });
 
 app.get("/", (req, res) => {
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 // Example endpoint: query database
-app.get("/users", async (req, res) => {
+app.get("/time", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW() as server_time");
     res.json(result.rows[0]);

@@ -12,33 +12,33 @@ services:
       - db
     environment:
       - DB_HOST=db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_USER=root
+      - DB_PASSWORD=root
       - DB_NAME=personel_db
-      - DB_PORT=5432
+      - DB_PORT=3306
 
   db:
-    image: postgres:15
+    image: mysql:8
     container_name: personel_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: personel_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: personel_db
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/mysql
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: personel_pgadmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: personel_phpmyadmin
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
     ports:
-      - "5050:80"
+      - "8080:80"
     depends_on:
       - db
 
