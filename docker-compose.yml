@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+db:
+image: mysql:8.0
+container_name: mgs_mysql
+restart: unless-stopped
+environment:
+MYSQL_DATABASE: ${MYSQL_DB}
+MYSQL_USER: ${MYSQL_USER}
+MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+ports:
+- "3306:3306"
+volumes:
+- ./data/mysql:/var/lib/mysql
+healthcheck:
+test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+interval: 10s
+timeout: 5s
+retries: 10
+
+
+phpmyadmin:
+image: phpmyadmin/phpmyadmin:latest
+container_name: mgs_phpmyadmin
+restart: unless-stopped
+environment:
+PMA_HOST: db
+PMA_USER: ${MYSQL_USER}
+PMA_PASSWORD: ${MYSQL_PASSWORD}
+ports:
+- "8081:80"
+depends_on:
+- db
+
+
+web:
+build: ./web
+container_name: mgs_web
+restart: unless-stopped
+env_file: .env
+ports:
+- "8000:8000"
+volumes:
+- ./web:/app # live-reload during dev
+depends_on:
+- db
